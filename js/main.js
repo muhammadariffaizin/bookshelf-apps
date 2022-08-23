@@ -48,8 +48,7 @@ document.addEventListener(SEARCH_EVENT, (event) => {
 
   const completedBOOKList = document.getElementById("completeBookshelfList");
   completedBOOKList.innerHTML = "";
-  
-  console.log(event.detail);
+
   filtered_books = event.detail;
   for (const bookItem of filtered_books) {
     const bookElement = makeBook(bookItem, books);
@@ -66,7 +65,6 @@ document.addEventListener("DOMContentLoaded", () => {
   inputForm.addEventListener("submit", (event) => {
     event.preventDefault();
     addBook(books);
-    console.log(books)
   });
 
   const searchForm = document.getElementById("searchBook");

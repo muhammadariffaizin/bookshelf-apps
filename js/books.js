@@ -117,7 +117,9 @@ const searchBook = (filtered_books, keyword) => {
   }
 
   const filterBooks = findBookName(keyword, filtered_books);
-  document.dispatchEvent(new CustomEvent(SEARCH_EVENT, { detail: filterBooks }));
+  document.dispatchEvent(
+    new CustomEvent(SEARCH_EVENT, { detail: filterBooks })
+  );
 };
 
 const addBookToCompleted = (bookId, books) => {
