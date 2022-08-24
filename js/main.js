@@ -10,17 +10,6 @@ import {
 let books = [];
 let filtered_books = [];
 
-const isCompleteBook = document.getElementById("inputBookIsComplete");
-const addBookTo = document.getElementById("addBookTo");
-isCompleteBook.addEventListener("change", () => {
-  const isChecked = isCompleteBook.checked;
-  if (isChecked) {
-    addBookTo.innerText = "Selesai dibaca";
-  } else {
-    addBookTo.innerText = "Belum selesai dibaca";
-  }
-});
-
 document.addEventListener(RENDER_EVENT, () => {
   const uncompletedBOOKList = document.getElementById(
     "incompleteBookshelfList"

@@ -60,34 +60,48 @@ const addBook = (books) => {
 
 const makeBook = (bookObject, books) => {
   const textTitle = document.createElement("h3");
+  textTitle.classList.add("text-corn-900");
   textTitle.innerText = bookObject.title;
 
-  const textAuthor = document.createElement("p");
-  textAuthor.innerText = `Penulis: ${bookObject.author}`;
+  const labelDescription = document.createElement("p");
+  labelDescription.classList.add("text-xs", "text-corn-700");
+  labelDescription.innerText = bookObject.author + " - " + bookObject.year;
 
-  const textYear = document.createElement("p");
-  textYear.innerText = `Tahun: ${bookObject.year}`;
+  const labelContainer = document.createElement("div");
+  labelContainer.classList.add("flex", "flex-col", "basis-3/4");
+  labelContainer.append(textTitle, labelDescription);
 
-  const container = document.createElement("article");
-  container.classList.add("book_item");
-  container.append(textTitle, textAuthor, textYear);
+  const container = document.createElement("li");
+  container.classList.add(
+    "flex",
+    "flex-row",
+    "items-center",
+    "p-3",
+    "text-base",
+    "font-bold",
+    "text-corn-900",
+    "bg-corn-50",
+    "rounded-lg",
+    "hover:bg-corn-100",
+    "group",
+    "hover:shadow"
+  );
+  container.append(labelContainer);
   container.setAttribute("id", `book-${bookObject.id}`);
 
   const buttonDelete = document.createElement("button");
-  buttonDelete.classList.add("red");
-  buttonDelete.innerText = "Hapus buku";
+  buttonDelete.classList.add("fa", "fa-trash", "p-3", "rounded-full", "hover:bg-corn-200");
 
   buttonDelete.addEventListener("click", () => {
     removeBookFromCompleted(bookObject.id, books);
   });
 
   const actionContainer = document.createElement("div");
-  actionContainer.classList.add("action");
+  actionContainer.classList.add("flex", "flex-row", "basis-1/4", "justify-end");
 
   if (bookObject.isComplete) {
     const buttonUndone = document.createElement("button");
-    buttonUndone.classList.add("green");
-    buttonUndone.innerText = "Belum selesai di Baca";
+    buttonUndone.classList.add("fa", "fa-xmark", "p-3", "rounded-full", "hover:bg-corn-200");
 
     buttonUndone.addEventListener("click", () => {
       undoneBookFromCompleted(bookObject.id, books);
@@ -96,8 +110,7 @@ const makeBook = (bookObject, books) => {
     actionContainer.append(buttonUndone, buttonDelete);
   } else {
     const buttonDone = document.createElement("button");
-    buttonDone.classList.add("green");
-    buttonDone.innerText = "Selesai dibaca";
+    buttonDone.classList.add("fa", "fa-check", "p-3", "rounded-full", "hover:bg-corn-200");
 
     buttonDone.addEventListener("click", () => {
       addBookToCompleted(bookObject.id, books);
