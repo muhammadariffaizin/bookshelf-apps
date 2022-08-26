@@ -90,18 +90,32 @@ const makeBook = (bookObject, books) => {
   container.setAttribute("id", `book-${bookObject.id}`);
 
   const buttonDelete = document.createElement("button");
-  buttonDelete.classList.add("fa", "fa-trash", "p-3", "rounded-full", "hover:bg-corn-200");
+  buttonDelete.classList.add(
+    "fa",
+    "fa-trash",
+    "p-3",
+    "rounded-full",
+    "hover:bg-corn-200"
+  );
+  buttonDelete.setAttribute(
+    "data-modal-toggle",
+    "delete-popup-" + bookObject.id
+  );
 
-  buttonDelete.addEventListener("click", () => {
-    removeBookFromCompleted(bookObject.id, books);
-  });
+  createConfirmationDeletePopup(bookObject.id, books);
 
   const actionContainer = document.createElement("div");
   actionContainer.classList.add("flex", "flex-row", "basis-1/4", "justify-end");
 
   if (bookObject.isComplete) {
     const buttonUndone = document.createElement("button");
-    buttonUndone.classList.add("fa", "fa-xmark", "p-3", "rounded-full", "hover:bg-corn-200");
+    buttonUndone.classList.add(
+      "fa",
+      "fa-xmark",
+      "p-3",
+      "rounded-full",
+      "hover:bg-corn-200"
+    );
 
     buttonUndone.addEventListener("click", () => {
       undoneBookFromCompleted(bookObject.id, books);
@@ -110,7 +124,13 @@ const makeBook = (bookObject, books) => {
     actionContainer.append(buttonUndone, buttonDelete);
   } else {
     const buttonDone = document.createElement("button");
-    buttonDone.classList.add("fa", "fa-check", "p-3", "rounded-full", "hover:bg-corn-200");
+    buttonDone.classList.add(
+      "fa",
+      "fa-check",
+      "p-3",
+      "rounded-full",
+      "hover:bg-corn-200"
+    );
 
     buttonDone.addEventListener("click", () => {
       addBookToCompleted(bookObject.id, books);
@@ -163,6 +183,109 @@ const undoneBookFromCompleted = (bookId, books) => {
   bookTarget.isComplete = false;
   document.dispatchEvent(new Event(RENDER_EVENT));
   saveData(books);
+};
+
+const createConfirmationDeletePopup = (bookId, books) => {
+  const modalId = "delete-popup-" + bookId;
+
+  const buttonCancel = document.createElement("button");
+  buttonCancel.classList.add(
+    "text-gray-500",
+    "bg-white",
+    "hover:bg-gray-100",
+    "focus:ring-4",
+    "focus:outline-none",
+    "focus:ring-gray-200",
+    "rounded-lg",
+    "border",
+    "border-gray-200",
+    "text-sm",
+    "font-medium",
+    "px-5",
+    "py-2.5",
+    "hover:text-gray-900",
+    "focus:z-10"
+  );
+  buttonCancel.setAttribute("type", "button");
+  buttonCancel.setAttribute("data-modal-toggle", modalId);
+  buttonCancel.innerText = "Ngga, batal";
+
+  const buttonDelete = document.createElement("button");
+  buttonDelete.classList.add(
+    "text-white",
+    "bg-red-600",
+    "hover:bg-red-800",
+    "focus:ring-4",
+    "focus:outline-none",
+    "focus:ring-red-300",
+    "font-medium",
+    "rounded-lg",
+    "text-sm",
+    "inline-flex",
+    "items-center",
+    "px-5",
+    "py-2.5",
+    "text-center",
+    "mr-2"
+  );
+  buttonDelete.setAttribute("type", "button");
+  buttonDelete.setAttribute("data-modal-toggle", modalId);
+  buttonDelete.innerText = "Ya, yakin";
+  buttonDelete.addEventListener("click", () => {
+    removeBookFromCompleted(bookId, books);
+  });
+
+  const container = document.createElement("div");
+  container.setAttribute("id", modalId);
+  container.setAttribute("tabindex", "-1");
+  container.classList.add(
+    "hidden",
+    "overflow-y-auto",
+    "overflow-x-hidden",
+    "fixed",
+    "top-0",
+    "right-0",
+    "left-0",
+    "z-50",
+    "md:inset-0",
+    "h-modal",
+    "md:h-full"
+  );
+
+  const popupTemplate = `<div class="relative p-4 w-full max-w-md h-full md:h-auto">
+    <div class="relative bg-white rounded-lg shadow">
+      <button
+        type="button"
+        class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
+        data-modal-toggle="${modalId}"
+      >
+        <i class="fa fa-xmark"></i>
+        <span class="sr-only">Close modal</span>
+      </button>
+      <div class="p-6 text-center">
+        <i class="fa fa-triangle-exclamation text-5xl p-4"></i>
+        <h3
+          class="mb-5 text-lg font-normal text-gray-500"
+        >
+          Apa kamu yakin mau hapus buku ini?
+        </h3>
+      </div>
+    </div>
+  </div>`;
+
+  const fragment = document
+    .createRange()
+    .createContextualFragment(popupTemplate);
+  console.log(fragment);
+  fragment.children[0].children[0].children[1].append(
+    buttonDelete,
+    buttonCancel
+  );
+
+  container.append(fragment);
+
+  const popupContainer = document.getElementById("popup-container");
+  popupContainer.append(container);
 };
 
 export { addBook, makeBook, searchBook };

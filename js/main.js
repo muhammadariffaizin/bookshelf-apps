@@ -6,6 +6,7 @@ import {
   SEARCH_EVENT,
   STORAGE_KEY,
 } from "./constant.js";
+import { initModal } from "./modal.js";
 
 let books = [];
 let filtered_books = [];
@@ -27,6 +28,7 @@ document.addEventListener(RENDER_EVENT, () => {
       completedBOOKList.append(bookElement);
     }
   }
+  initModal();
 });
 
 document.addEventListener(SEARCH_EVENT, (event) => {
@@ -47,6 +49,7 @@ document.addEventListener(SEARCH_EVENT, (event) => {
       completedBOOKList.append(bookElement);
     }
   }
+  initModal();
 });
 
 document.addEventListener("DOMContentLoaded", () => {
